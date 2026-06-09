@@ -15,7 +15,11 @@ public:
     Stack() : top(nullptr), size(0) {}
     virtual ~Stack(){}
 
-    void clear();
+    void clear(){
+        while(size > 0){
+            pop();
+        }
+    }
 
     void push(const E& it){
         Node* novoNo = new Node(it);
@@ -44,7 +48,15 @@ public:
 
 int main(){
 
+    int n;
     
+
+    while(true){
+        
+        while(true){
+
+        }
+    }
 
     return 0;
 }
