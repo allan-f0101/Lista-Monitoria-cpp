@@ -2,23 +2,49 @@
 
 template<typename E> class Stack{
 private:
-    void operator = (const Stack&){}
-    Stack(const Stack&){}
+    struct Node{
+        E data;
+        Node* next;
+        Node(E d) : data(d), next(nullptr) {}
+    };
+
+    Node* top;
+    int size;
+
 public:
-    Stack(){}
+    Stack() : top(nullptr), size(0) {}
     virtual ~Stack(){}
 
-    virtual void clear() = 0;
+    void clear();
 
-    virtual void push(const E& it) = 0;
+    void push(const E& it){
+        Node* novoNo = new Node(it);
+        novoNo->next = top;
+        top = novoNo;
+        size++;
+    }
 
-    virtual E pop() = 0;
+    E pop(){
+        Node* temp = top;
+        top = top->next;
+        E valor = temp->data;
+        delete temp;
+        size--;
+        return valor;
+    }
 
-    virtual const E& topValue() const = 0;
+    const E& topValue() const{
+        return top->data;
+    }
 
-    virtual int length() const = 0;
+    int length() const{
+        return size;
+    }
 };
 
 int main(){
+
+    
+
     return 0;
 }
