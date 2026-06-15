@@ -36,22 +36,33 @@ public:
         }
     }
     ~Dictionary() {};
+    //Insere algo no dicionário
+    void insert(string key, E value){
+        int posParaInserir = -1;
+        bool ja_existe = false;
 
-    void insert(string key, E value){        
         for(int i = 0; i < 20; i++){
             int pos = (Hash(key) + i*i + 23*i) % 101;
 
-            if(estado[pos] == VAZIO || estado[pos] == DELETADO){
-                keys[pos] = key;
-                values[pos] = value;
-                estado[pos] = OCUPADO;
-                cont++;
-                return;
+            if(estado[pos] == OCUPADO && keys[pos] == key){
+                ja_existe = true;
+                break;
             }
 
-            else if(estado[pos] == OCUPADO && keys[pos] == key){
-                return;
+            if((estado[pos] == VAZIO || estado[pos] == DELETADO) && posParaInserir == -1){
+                posParaInserir = pos;
             }
+
+            if(estado[pos] == VAZIO){
+                break;
+            }
+        }
+
+        if(posParaInserir != -1 && !ja_existe){
+            keys[posParaInserir] = key;
+            values[posParaInserir] = value;
+            estado[posParaInserir] = OCUPADO;
+            cont++;
         }
     }
 
