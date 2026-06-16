@@ -1,21 +1,18 @@
 #include <iostream>
 #include <list>
-
-using namespace std;
+#include <string>
 
 template<typename E>
 class Dictionary{
 private:
     struct Par{
         string chave;
-        E valor;
+        E value;
     };
 
     static const int tam = 100003;
 
-    list<Par> tabela[tam];
-
-    int cont;
+    list<Par> lista[tam];
 
     int Hash(string key){
         int forCont = 1;
@@ -27,15 +24,16 @@ private:
         }
 
         return sum % tam;
-    };
-
-public:
-    Dictionary() : cont(0) {
-        for(int i = 0; i < tam; i++){
-            tabela[i].clear();
-        }
     }
 
+    int cont;
+
+public:
+    Dictionary() : cont(0){
+        for(int i = 0; i < tam; i++){
+            lista[i].clear();
+        }
+    }
     ~Dictionary(){}
 
     void insert(string key, E value){
@@ -43,37 +41,60 @@ public:
 
         Par novoPar;
         novoPar.chave = key;
-        novoPar.valor = value;
+        novoPar.value = value;
 
-        tabela[pos].push_back(novoPar);
+        lista[pos].push_back(novoPar);
 
         cont++;
-
     }
-        
+
     E find(string key){
         int pos = Hash(key);
 
-        for(auto const& par : tabela[pos]){
+        for(auto const& par : lista[pos]){
             if(par.chave == key){
-                return par.valor;
+                return par.value;
             }
         }
 
         return E();
     }
-    
+
     void clear(){
         for(int i = 0; i < tam; i++){
-            
+            lista[i].clear();
         }
     }
 
     int size(){
         return cont;
     }
+
+    void print(){
+        for(string valor : lista[key]){
+            cout << valor;
+        }
+    }
 };
 
 int main(){
+    int cont = 0;
+
+    Dictionary<string> linha;
+    string input;
+
+    while(getline(cin, input)){
+        
+        if(linha.empty()){
+            break;
+        }
+
+        stringstream ss(linha);
+
+        string chave, valor;
+        ss >> chave;
+        ss >> valor;
+
+    }   
     return 0;
 }
