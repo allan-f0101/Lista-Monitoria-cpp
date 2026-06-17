@@ -90,14 +90,16 @@ int main(){
         stringstream ss(input);
 
         string chave, valor;
-        ss >> chave;
         ss >> valor;
+        ss >> chave;
 
         dict.insert(chave, valor);
 
     }   
 
     while(getline(cin, input)){
+        if(input.empty()) continue;
+        
         string resposta = dict.find(input);
         if(resposta.empty()){
             cout << "eh\n";
