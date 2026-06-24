@@ -1,68 +1,58 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 template<typename E>
 class Dicionario{
 private:
-    enum Estado{VAZIO, DELETADO, OCUPADO};
-    
+    struct Elemento{
+        int key;
+        E value;
+    };
+
     static const int tam = 10;
 
-    E lista[tam];
-    Estado estado[tam];
-    E keys[tam];
+    vector<Elemento> tabela[tam];
+    int contador = 0;
 
     int Hash(int key){
         return key % 10; 
     }
 
-    int contador = 0;
-
 public:
-    Dicionario() : contador(0) {
-        for(int i = 0; i < tam; i++){
-            estado[i] = VAZIO;
-        }
-    }
+    Dicionario() : contador(0) {}
     ~Dicionario(){}
 
     void insert(int key, E value){
         int pos = Hash(key);
 
-        if(estado[pos] == OCUPADO){
-            return;
-        }
-
-        if(estado[pos] == VAZIO && keys[pos] == key){
-            estado[pos] = OCUPADO;
-            keys[pos] = key;
-            lista[pos] = value;
-            return;
+        for(const auto& elem : tabela[pos]){
+            if(elem.key == key){
+                return;
+            }
         }
 
         contador++;
+        tabela[pos].push_back({key, value});
     }
 
     void remove(int key){
         int pos = Hash(key);
 
-        if(estado[pos] == VAZIO){
-            return;
+        for(int i = 0; i < tabela[pos].size(); i++){
+            if(tabela[pos][i].key == key){
+                tabela[pos].erase(tabela[pos].begin() + i);
+                contador--;
+                return;
+            }
         }
-
-        if(estado[pos] == OCUPADO && keys[pos] == key){
-            estado[pos] = VAZIO;
-            keys[pos] = 0;
-        }
-
-        contador--;
     }
 
     void clear(){
         for(int i = 0; i < tam; i++){
-            estado[i] = VAZIO;
+            tabela[i].clear();
         }
     }
 
@@ -70,10 +60,20 @@ public:
         return contador;
     }
 
-    void print(){
+    void print(int numeroCaso){
+        cout << "caso " << numeroCaso << ":" << endl;
         cout << "alpha = " << contador << "/" << tam << endl;
         for(int i = 0; i < tam; i++){
-            cout << i << ": " << lista[i] << endl;
+            cout << i << ":";
+
+            for(int j = 0; j < tabela[i].size(); j++){
+                cout << "(" << tabela[i][j].key << "," << tabela[i][j].value << ")";
+
+                if(j < tabela[i].size() - 1){
+                    cout << ",";
+                }
+            }
+            cout << endl;
         }
     }
 };
@@ -108,31 +108,9 @@ int main(){
             }
         }
 
-        dict.print();
+        dict.print(cont + 1);
         cont++;
     }
 
     return 0;
 }
-
-// 1
-// 5
-// add 123 gustavo
-// add 456 lucas
-// add 789 pedro
-// del 123
-// add 6 gustavo
-
-
-// caso 1:
-// alpha = 3/10
-// 0:
-// 1:
-// 2:
-// 3:
-// 4:
-// 5:
-// 6:(456,lucas),(6,gustavo)
-// 7:
-// 8:
-// 9:(789,pedro)
