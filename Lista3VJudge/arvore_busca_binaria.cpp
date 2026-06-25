@@ -15,12 +15,12 @@ private:
 
     Node* root;
 
-    Node* searchHealper(Node* current, int data){
+    Node* searchHealper(Node* current, int key){
         Node* current = root;
 
-        while(current != nullptr && current->data != data){
+        while(current != nullptr && current->data != key){
 
-            if(current->data > data){
+            if(current->data > key){
                 current = current->leftChild;
             }
             else{
