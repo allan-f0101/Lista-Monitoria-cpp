@@ -9,10 +9,17 @@ class Dictionary{
 private:
     enum Estado{VAZIO, OCUPADO, DELETADO};
 
+    struct Elemento{
+        string key;
+        E value;
+        Estado estado;
+
+        Elemento() : estado(VAZIO) {}
+    };
+
     static const int tam = 101;
-    string keys[tam];
-    E values[tam];
-    Estado estado[tam];
+    
+    Elemento tabela[tam];
     int cont;
 
     int Hash(string key){
@@ -27,12 +34,12 @@ private:
         int function = 19 * sum;
         
         return function % 101;
-    };
+    }
 
 public:
     Dictionary() : cont(0) {
         for(int i = 0; i < tam; i++){
-            estado[i] = VAZIO;
+            tabela[i].estado = VAZIO;
         }
     }
     ~Dictionary() {};
@@ -44,24 +51,24 @@ public:
         for(int i = 0; i < 20; i++){
             int pos = (Hash(key) + i*i + 23*i) % 101;
 
-            if(estado[pos] == OCUPADO && keys[pos] == key){
+            if(tabela[pos].estado == OCUPADO && tabela[pos].key == key){
                 ja_existe = true;
                 break;
             }
 
-            if((estado[pos] == VAZIO || estado[pos] == DELETADO) && posParaInserir == -1){
+            if((tabela[pos].estado == VAZIO || tabela[pos].estado == DELETADO) && posParaInserir == -1){
                 posParaInserir = pos;
             }
 
-            if(estado[pos] == VAZIO){
+            if(tabela[pos].estado == VAZIO){
                 break;
             }
         }
 
         if(posParaInserir != -1 && !ja_existe){
-            keys[posParaInserir] = key;
-            values[posParaInserir] = value;
-            estado[posParaInserir] = OCUPADO;
+            tabela[posParaInserir].key = key;
+            tabela[posParaInserir].value = value;
+            tabela[posParaInserir].estado = OCUPADO;
             cont++;
         }
     }
@@ -69,14 +76,15 @@ public:
     E remove(string key){
         for(int j = 0; j < 20; j++){
             int pos = (Hash(key) + j*j + 23*j) % 101;
-            // if(estado[pos] == VAZIO){
-            //     break;
-            // }
 
-            if(estado[pos] == OCUPADO && keys[pos] == key){
-                estado[pos] = DELETADO;
+            if(tabela[pos].estado == VAZIO){
+                break;
+            }
+
+            if(tabela[pos].estado == OCUPADO && tabela[pos].key == key){
+                tabela[pos].estado = DELETADO;
                 cont--;
-                return values[pos];
+                return tabela[pos].value;
             }
         }
         return E();
@@ -86,12 +94,12 @@ public:
         for(int j = 0; j < 20; j++){
             int pos = (Hash(key) + j*j + 23*j) % 101;
 
-            if(estado[pos] == VAZIO){
+            if(tabela[pos].estado == VAZIO){
                 return E();
             }
 
-            if(estado[pos] == OCUPADO && keys[pos] == key){
-                return values[pos];
+            if(tabela[pos].estado == OCUPADO && tabela[pos].key == key){
+                return tabela[pos].value;
             }
         }
         return E();
@@ -99,7 +107,7 @@ public:
 
     void clear(){
         for(int i = 0; i < tam; i++){
-            estado[i] = VAZIO;
+            tabela[i].estado = VAZIO;
         }
         cont = 0;
     }
@@ -110,8 +118,8 @@ public:
 
     void print(){
         for(int i = 0; i < tam; i++){
-            if(estado[i] == OCUPADO){
-                cout << i << ":" << keys[i] << endl;
+            if(tabela[i].estado == OCUPADO){
+                cout << i << ":" << tabela[i].key << endl;
             }
         }
     }

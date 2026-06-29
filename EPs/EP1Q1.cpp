@@ -128,7 +128,7 @@ int main(){
 
     for(int i = 0; i < num; i++){
         cin >> num2;
-        for(int j = 0; i < num2; j++){
+        for(int j = 0; j < num2; j++){
             string input;
             cin >> input;
 

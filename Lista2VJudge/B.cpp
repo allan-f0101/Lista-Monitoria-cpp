@@ -51,6 +51,24 @@ public:
         cont++;
     }
 
+    E remove(string key){
+        int pos = Hash(key);
+        
+        for(auto it = lista[pos].begin(); it!=lista[pos].end(); ++it){
+            if(it->key == key){
+                E valor_antigo = it->value;
+
+                lista[pos].erase(it);
+                cont--;
+
+                return valor_antigo;
+            }
+        }
+
+        return E();
+
+    }
+
     E find(string key){
         int pos = Hash(key);
 
