@@ -37,14 +37,6 @@ private:
         return getMin(current->leftChild);
     }
 
-    Node* deleteMin(Node* current){
-        if(current->leftChild == nullptr){
-            return current->rightChild;
-        }
-        current->leftChild = deleteMin(current->leftChild);
-        return current;
-    }
-
     Node* removeHealper(Node* current, int key){
         if(current == nullptr){
             return nullptr;
@@ -60,24 +52,20 @@ private:
             cont--;
             if(current->leftChild == nullptr){
                 Node* temp = current->rightChild;
-                delete current->leftChild;
+                delete current;
                 return temp;
             }
 
             else if(current->rightChild == nullptr){
                 Node* temp = current->leftChild;
-                delete current->rightChild;
+                delete current;
                 return temp;
             }
             
             else{
-                if(current->leftChild == nullptr && current->rightChild == nullptr){
-                    delete current;
-                    return nullptr;
-                }
                 Node* temp = getMin(current->rightChild);
                 current->data = temp->data;
-                current->rightChild = deleteMin(current->rightChild);
+                current->rightChild = removeHealper(current->rightChild, temp->data);
             }
         }
         return current;
